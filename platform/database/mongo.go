@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,6 +23,7 @@ func (m *Mongo) GetClient() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	uri := "mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority&appName=ClusterTestGo"
 	uri = fmt.Sprintf(uri, m.Username, m.Password, m.Host)
+	uri = url.QueryEscape(uri)
 	fmt.Println(uri)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
