@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dpolimeni/stockmanagement/pkg/routes"
 	"dpolimeni/stockmanagement/platform/database"
 	"fmt"
 
@@ -49,6 +50,7 @@ func main() {
 	// Let the app use the swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	app.Get("/", HealthCheck)
+	routes.StockRoutes(app)
 
 	app.Listen(":8080")
 }

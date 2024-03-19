@@ -47,6 +47,30 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/stock": {
+            "get": {
+                "description": "Get test on base path.",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Show the status of server.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     }
 }`

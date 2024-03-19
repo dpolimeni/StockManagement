@@ -29,4 +29,20 @@ paths:
       summary: Show the status of server.
       tags:
       - Root Base
+  /api/v1/stock:
+    get:
+      consumes:
+      - '*/*'
+      description: Get test on base path.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Show the status of server.
+      tags:
+      - Stock
 swagger: "2.0"
