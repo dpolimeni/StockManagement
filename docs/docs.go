@@ -61,6 +61,16 @@ const docTemplate = `{
                     "Stock"
                 ],
                 "summary": "Show the status of server.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

@@ -10,6 +10,7 @@ import "github.com/gofiber/fiber/v2"
 // @Produce json
 // @Success 200 {object} map[string]interface{}
 // @Router /api/v1/stock [get]
+// @Param Authorization header string true "Authorization" Default(Bearer )
 func StockHandler(c *fiber.Ctx) error {
 	return c.SendString("Hello, World!")
 }
