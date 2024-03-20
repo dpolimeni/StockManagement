@@ -1,4 +1,12 @@
 basePath: /
+definitions:
+  handlers.UserLogin:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -29,6 +37,29 @@ paths:
       summary: Show the status of server.
       tags:
       - Root Base
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to the application
+      parameters:
+      - description: UserLogin
+        in: body
+        name: userLogin
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login to the application
+      tags:
+      - auth
   /api/v1/stock:
     get:
       consumes:
