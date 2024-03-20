@@ -51,6 +51,7 @@ func main() {
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	app.Get("/", HealthCheck)
 	routes.StockRoutes(app)
+	routes.AuthRoute(app, &mongo)
 
 	app.Listen(":8080")
 }

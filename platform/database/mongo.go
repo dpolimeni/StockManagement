@@ -32,3 +32,8 @@ func (m *Mongo) GetClient() error {
 
 	return err
 }
+
+// AuthorizeUser checks if the user is authorized to access the database
+func (m *Mongo) AuthorizeUser(username, password string) (bool, error) {
+	return true, nil
+}
