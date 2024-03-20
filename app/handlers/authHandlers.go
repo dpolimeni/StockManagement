@@ -41,6 +41,7 @@ func (handler AuthHandler) LoginHandler(c *fiber.Ctx) error {
 	}
 
 	if authorized {
+		fmt.Println("Authorized")
 		token, err := middleware.GenerateToken(userLogin.Username)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(err)
