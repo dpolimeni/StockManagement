@@ -1,14 +1,26 @@
 package schemas
 
-import (
-	"fmt"
-)
-
-type Stock struct {
-	Name  string
-	Price float64
+type RawMaterial struct {
+	Name        string
+	Description string
+	Quantity    float64
 }
 
-func (s *Stock) String() string {
-	return fmt.Sprintf("Name: %s, Price: %f", s.Name, s.Price)
+type Product struct {
+	Name         string
+	Description  string
+	Price        float64
+	RawMaterials []RawMaterial
+}
+
+type Stock struct {
+	RawMaterials []RawMaterial
+	Products     []Product
+}
+
+type Restaurant struct {
+	Id      string
+	Name    string
+	Address string
+	Stock   Stock
 }
