@@ -1,6 +1,7 @@
-package handler
+package handlers
 
 import (
+	"dpolimeni/stockmanagement/app/schemas"
 	"dpolimeni/stockmanagement/platform/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,5 +18,13 @@ import (
 // @Router /api/v1/restaurant [post]
 // @Param Authorization header string true "Authorization" Default(Bearer )
 func RestaurantHandler(c *fiber.Ctx, DB database.Storage) error {
-
+	var restaurant schemas.Restaurant
+	if err := c.BodyParser(&restaurant); err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
+	}
+	err := DB.AddRestaurant(restaurant)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
+	}
+	return c.Status(200).JSON(restaurant)
 }
