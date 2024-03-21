@@ -2,6 +2,7 @@ package middleware
 
 // Set up JWT AUTH
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -43,6 +44,7 @@ func JWTMiddleware() func(*fiber.Ctx) error {
 	config := jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(os.Getenv("JWT_SECRET"))},
 	})
+	fmt.Println(os.Getenv("JWT_SECRET"))
 	return config
 }
 

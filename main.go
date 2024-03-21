@@ -52,6 +52,7 @@ func main() {
 	app.Get("/", HealthCheck)
 	routes.StockRoutes(app)
 	routes.AuthRoute(app, &mongo)
+	routes.RestaurantRoutes(app, &mongo)
 
 	app.Listen(":8080")
 }

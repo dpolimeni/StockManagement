@@ -7,6 +7,50 @@ definitions:
       username:
         type: string
     type: object
+  schemas.Product:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      rawMaterials:
+        items:
+          $ref: '#/definitions/schemas.RawMaterial'
+        type: array
+    type: object
+  schemas.RawMaterial:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      quantity:
+        type: number
+    type: object
+  schemas.Restaurant:
+    properties:
+      address:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      stock:
+        $ref: '#/definitions/schemas.Stock'
+    type: object
+  schemas.Stock:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/schemas.Product'
+        type: array
+      rawMaterials:
+        items:
+          $ref: '#/definitions/schemas.RawMaterial'
+        type: array
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -60,6 +104,34 @@ paths:
       summary: Login to the application
       tags:
       - auth
+  /api/v1/restaurant:
+    post:
+      consumes:
+      - application/json
+      description: Add a new restaurant to the database
+      parameters:
+      - description: Restaurant object that needs to be added
+        in: body
+        name: restaurant
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.Restaurant'
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Restaurant'
+      summary: Add a new restaurant
+      tags:
+      - Restaurant
   /api/v1/stock:
     get:
       consumes:

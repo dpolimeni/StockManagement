@@ -7,6 +7,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type RestaurantHandler struct {
+	DB database.Storage
+}
+
 // RestaurantHandler is the handler for the restaurant endpoint
 // @Summary Add a new restaurant
 // @Description Add a new restaurant to the database
@@ -17,12 +21,12 @@ import (
 // @Success 200 {object} schemas.Restaurant
 // @Router /api/v1/restaurant [post]
 // @Param Authorization header string true "Authorization" Default(Bearer )
-func RestaurantHandler(c *fiber.Ctx, DB database.Storage) error {
+func (handler RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
 	var restaurant schemas.Restaurant
 	if err := c.BodyParser(&restaurant); err != nil {
 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
 	}
-	err := DB.AddRestaurant(restaurant)
+	err := handler.DB.AddRestaurant(restaurant)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
 	}

@@ -77,6 +77,48 @@
                 }
             }
         },
+        "/api/v1/restaurant": {
+            "post": {
+                "description": "Add a new restaurant to the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Add a new restaurant",
+                "parameters": [
+                    {
+                        "description": "Restaurant object that needs to be added",
+                        "name": "restaurant",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Restaurant"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Restaurant"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/stock": {
             "get": {
                 "description": "Get test on base path.",
@@ -121,6 +163,74 @@
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "schemas.Product": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "rawMaterials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.RawMaterial"
+                    }
+                }
+            }
+        },
+        "schemas.RawMaterial": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
+                }
+            }
+        },
+        "schemas.Restaurant": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stock": {
+                    "$ref": "#/definitions/schemas.Stock"
+                }
+            }
+        },
+        "schemas.Stock": {
+            "type": "object",
+            "properties": {
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.Product"
+                    }
+                },
+                "rawMaterials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.RawMaterial"
+                    }
                 }
             }
         }
