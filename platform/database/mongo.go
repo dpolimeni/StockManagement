@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"dpolimeni/stockmanagement/app/schemas"
 	"fmt"
 	"os"
 	"time"
@@ -60,4 +61,16 @@ func (m *Mongo) AuthorizeUser(username, password string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+// AddRestaurant adds a new restaurant to the database
+func (m *Mongo) AddRestaurant(restaurant schemas.Restaurant) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	collection := m.Client.Database("stockmanagement").Collection("restaurants")
+	_, err := collection.InsertOne(ctx, restaurant)
+	if err != nil {
+		return err
+	}
+	return nil
 }
