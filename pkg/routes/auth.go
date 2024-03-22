@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dpolimeni/stockmanagement/app/handlers"
+	"dpolimeni/stockmanagement/pkg/middleware"
 	"dpolimeni/stockmanagement/platform/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,4 +16,6 @@ func AuthRoute(app *fiber.App, DB database.Storage) {
 	}
 
 	route.Post("/login", authHandler.LoginHandler)
+	route.Use(middleware.JWTMiddleware())
+	route.Post("/refresh", authHandler.RefreshToken)
 }

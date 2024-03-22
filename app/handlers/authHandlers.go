@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type UserLogin struct {
@@ -50,4 +51,25 @@ func (handler AuthHandler) LoginHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Unauthorized"})
+}
+
+// RefreshToken godoc
+// @Summary Refresh the token
+// @Description Refresh the token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Router /api/v1/auth/refresh [post]
+// @Success 200 {object} map[string]interface{}
+func (handler AuthHandler) RefreshToken(c *fiber.Ctx) error {
+	// Get the username from the token
+	userToken := c.Locals("user").(*jwt.Token)
+	claims := userToken.Claims.(jwt.MapClaims)
+	username := claims["username"].(string)
+	token, err := middleware.GenerateToken(username)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
+	}
+	return c.Status(fiber.StatusOK).JSON(token)
 }

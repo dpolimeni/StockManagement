@@ -104,6 +104,29 @@ paths:
       summary: Login to the application
       tags:
       - auth
+  /api/v1/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh the token
+      parameters:
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Refresh the token
+      tags:
+      - auth
   /api/v1/restaurant:
     delete:
       consumes:
