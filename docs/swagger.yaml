@@ -105,6 +105,33 @@ paths:
       tags:
       - auth
   /api/v1/restaurant:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a restaurant from the database
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a restaurant
+      tags:
+      - Restaurant
     post:
       consumes:
       - application/json

@@ -19,4 +19,5 @@ func RestaurantRoutes(app *fiber.App, DB database.Storage) {
 
 	route.Use(middleware.JWTMiddleware())
 	route.Post("/", restaurantHandler.AddRestaurant)
+	route.Delete("/", restaurantHandler.DeleteRestaurant)
 }

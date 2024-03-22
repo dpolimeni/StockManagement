@@ -8,5 +8,5 @@ type Storage interface {
 	GetClient() error
 	AuthorizeUser(username, password string) (bool, error)
 	NewRestaurant(restaurant schemas.Restaurant) error
-	DeleteRestaurant(restaurant schemas.Restaurant) error
+	DeleteRestaurant(restaurantId string) error
 }

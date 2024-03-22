@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
@@ -76,13 +77,16 @@ func (m *Mongo) NewRestaurant(restaurant schemas.Restaurant) error {
 }
 
 // Delete Restaurant deletes a restaurant from the database
-func (m *Mongo) DeleteRestaurant(restaurant schemas.Restaurant) error {
+func (m *Mongo) DeleteRestaurant(restaurantId string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second) // This set a time limit to execute this function
 	defer cancel()
 	collection := m.Client.Database("stockmanagement").Collection("restaurants")
-	_, err := collection.DeleteOne(ctx, restaurant)
+	deleted, err := collection.DeleteOne(ctx, bson.M{"id": restaurantId})
 	if err != nil {
 		return err
+	}
+	if deleted.DeletedCount == 0 {
+		return fmt.Errorf("Restaurant not found")
 	}
 	return nil
 }
