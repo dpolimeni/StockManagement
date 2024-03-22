@@ -74,3 +74,15 @@ func (m *Mongo) NewRestaurant(restaurant schemas.Restaurant) error {
 	}
 	return nil
 }
+
+// Delete Restaurant deletes a restaurant from the database
+func (m *Mongo) DeleteRestaurant(restaurant schemas.Restaurant) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second) // This set a time limit to execute this function
+	defer cancel()
+	collection := m.Client.Database("stockmanagement").Collection("restaurants")
+	_, err := collection.DeleteOne(ctx, restaurant)
+	if err != nil {
+		return err
+	}
+	return nil
+}
