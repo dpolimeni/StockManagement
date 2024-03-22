@@ -64,7 +64,7 @@ func (m *Mongo) AuthorizeUser(username, password string) (bool, error) {
 }
 
 // AddRestaurant adds a new restaurant to the database
-func (m *Mongo) AddRestaurant(restaurant schemas.Restaurant) error {
+func (m *Mongo) NewRestaurant(restaurant schemas.Restaurant) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	collection := m.Client.Database("stockmanagement").Collection("restaurants")

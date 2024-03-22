@@ -26,7 +26,7 @@ func (handler RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
 	if err := c.BodyParser(&restaurant); err != nil {
 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
 	}
-	err := handler.DB.AddRestaurant(restaurant)
+	err := handler.DB.NewRestaurant(restaurant)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
 	}

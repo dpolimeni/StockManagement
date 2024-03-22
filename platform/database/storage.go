@@ -7,5 +7,6 @@ import (
 type Storage interface {
 	GetClient() error
 	AuthorizeUser(username, password string) (bool, error)
-	AddRestaurant(restaurant schemas.Restaurant) error
+	NewRestaurant(restaurant schemas.Restaurant) error
+	DeleteRestaurant(restaurant schemas.Restaurant) error
 }

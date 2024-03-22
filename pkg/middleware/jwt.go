@@ -22,7 +22,7 @@ func GenerateToken(username string) (map[string]string, error) {
 		"exp":      time.Now().Add(time.Minute * 24 * 60).Unix(),
 		"iat":      time.Now().Unix(),
 	})
-	secret := os.Getenv("SECRET_KEY")
+	secret := os.Getenv("JWT_SECRET")
 	access, err := token.SignedString([]byte(secret))
 	if err != nil {
 		return nil, err
