@@ -50,7 +50,7 @@ func main() {
 	// Let the app use the swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	app.Get("/", HealthCheck)
-	routes.StockRoutes(app)
+	routes.StockRoutes(app, &mongo)
 	routes.AuthRoute(app, &mongo)
 	routes.RestaurantRoutes(app, &mongo)
 	app.Listen(":8080")

@@ -200,9 +200,9 @@ const docTemplate = `{
         },
         "/api/v1/stock": {
             "get": {
-                "description": "Get test on base path.",
+                "description": "Get the stock levels of a restaurant",
                 "consumes": [
-                    "*/*"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -210,8 +210,15 @@ const docTemplate = `{
                 "tags": [
                     "Stock"
                 ],
-                "summary": "Show the status of server.",
+                "summary": "Get the stock levels",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "default": "Bearer",
@@ -221,15 +228,7 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },

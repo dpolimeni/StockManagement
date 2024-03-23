@@ -86,7 +86,19 @@ func (m *Mongo) DeleteRestaurant(restaurantId string) error {
 		return err
 	}
 	if deleted.DeletedCount == 0 {
-		return fmt.Errorf("Restaurant not found")
+		return fmt.Errorf("restaurant not found")
 	}
 	return nil
+}
+
+func (m *Mongo) GetRestaurant(restaurantId string) (schemas.Restaurant, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	collection := m.Client.Database("stockmanagement").Collection("restaurants")
+	var restaurant schemas.Restaurant
+	err := collection.FindOne(ctx, bson.M{"id": restaurantId}).Decode(&restaurant)
+	if err != nil {
+		return restaurant, err
+	}
+	return restaurant, nil
 }

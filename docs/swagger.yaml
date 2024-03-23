@@ -185,9 +185,14 @@ paths:
   /api/v1/stock:
     get:
       consumes:
-      - '*/*'
-      description: Get test on base path.
+      - application/json
+      description: Get the stock levels of a restaurant
       parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
       - default: Bearer
         description: Authorization
         in: header
@@ -196,13 +201,8 @@ paths:
         type: string
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Show the status of server.
+      responses: {}
+      summary: Get the stock levels
       tags:
       - Stock
 swagger: "2.0"

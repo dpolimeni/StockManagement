@@ -1,6 +1,8 @@
 package handlers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
 // StockHandler is the handler for the stock endpoint
 // @Summary Show the status of server.
@@ -17,8 +19,28 @@ func StockHandler(c *fiber.Ctx) error {
 
 // Get stock levels
 // This should be called when the stock levels are needed
+// @Summary Get the stock levels
+// @Description Get the stock levels of a restaurant
+// @Tags Stock
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Router /api/v1/stock [get]
 func (handler RestaurantHandler) GetStock(c *fiber.Ctx) error {
-	return c.SendString("Hello, World!")
+	// Create an empty restaurant
+	restaurantId := c.Query("restaurant")
+
+	// Get the stock levels
+	db_restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot get the stock levels",
+		})
+	}
+
+	stockLevel := db_restaurant.Stock
+	return c.Status(fiber.StatusOK).JSON(stockLevel)
 }
 
 // Initial handler to populate the stock
