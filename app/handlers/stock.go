@@ -1,20 +1,14 @@
 package handlers
 
 import (
+	"dpolimeni/stockmanagement/platform/database"
+
 	"github.com/gofiber/fiber/v2"
 )
 
-// StockHandler is the handler for the stock endpoint
-// @Summary Show the status of server.
-// @Description Get test on base path.
-// @Tags Stock
-// @Accept */*
-// @Produce json
-// @Success 200 {object} map[string]interface{}
-// @Router /api/v1/stock [get]
-// @Param Authorization header string true "Authorization" Default(Bearer )
-func StockHandler(c *fiber.Ctx) error {
-	return c.SendString("Hello, World!")
+// RestaurantHandler is the handler for the restaurant endpoint
+type StockHandler struct {
+	DB *database.Mongo
 }
 
 // Get stock levels
@@ -27,7 +21,7 @@ func StockHandler(c *fiber.Ctx) error {
 // @Param restaurant query string true "Restaurant ID"
 // @Param Authorization header string true "Authorization" Default(Bearer )
 // @Router /api/v1/stock [get]
-func (handler RestaurantHandler) GetStock(c *fiber.Ctx) error {
+func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 	// Create an empty restaurant
 	restaurantId := c.Query("restaurant")
 

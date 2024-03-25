@@ -9,12 +9,12 @@ import (
 )
 
 // StockRoutes sets up the routes for the stock endpoint
-func StockRoutes(app *fiber.App, DB database.Storage) {
+func StockRoutes(app *fiber.App, DB *database.Mongo) {
 	route := app.Group("api/v1/stock")
 	route.Use(middleware.JWTMiddleware())
 
 	// Create Mongo DB connection
-	restaurantHandler := handlers.RestaurantHandler{
+	restaurantHandler := handlers.StockHandler{
 		DB: DB,
 	}
 
