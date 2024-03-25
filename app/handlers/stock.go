@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"dpolimeni/stockmanagement/app/schemas"
 	"dpolimeni/stockmanagement/platform/database"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -43,8 +45,36 @@ func (handler RestaurantHandler) CreateStock(c *fiber.Ctx) error {
 }
 
 // Update the stock with product sells
-// This should be called when products are sell
-func (handler RestaurantHandler) SellProduct(c *fiber.Ctx) error {
+// This should be called when the restaurant sell some products
+// @Summary Sell products
+// @Description Sell products from the stock
+// @Tags Stock
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param Products body []schemas.Product true "Products to sell"
+// @Router /api/v1/stock/sell [post]
+func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
+	// Get the list of products
+	var products []schemas.Product
+	if err := c.BodyParser(&products); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse the request",
+		})
+	}
+	// Iterate over the products and update the stock
+	for _, product := range products {
+		// Get the product from the database
+		name := product.Name
+		materials := product.RawMaterials
+		for _, material := range materials {
+			// Get the material from the database
+			materialName := material.Name
+			quantity := material.Quantity
+			fmt.Println(materialName, quantity)
+			fmt.Println(name, quantity)
+		}
+	}
 	return c.SendString("Hello, World!")
 }
 

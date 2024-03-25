@@ -205,4 +205,29 @@ paths:
       summary: Get the stock levels
       tags:
       - Stock
+  /api/v1/stock/sell:
+    post:
+      consumes:
+      - application/json
+      description: Sell products from the stock
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Products to sell
+        in: body
+        name: Products
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/schemas.Product'
+          type: array
+      produces:
+      - application/json
+      responses: {}
+      summary: Sell products
+      tags:
+      - Stock
 swagger: "2.0"

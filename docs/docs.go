@@ -230,6 +230,43 @@ const docTemplate = `{
                 ],
                 "responses": {}
             }
+        },
+        "/api/v1/stock/sell": {
+            "post": {
+                "description": "Sell products from the stock",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Sell products",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Products to sell",
+                        "name": "Products",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schemas.Product"
+                            }
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
