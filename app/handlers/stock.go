@@ -56,25 +56,27 @@ func (handler RestaurantHandler) CreateStock(c *fiber.Ctx) error {
 // @Router /api/v1/stock/sell [post]
 func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 	// Get the list of products
-	var products []schemas.Product
-	if err := c.BodyParser(&products); err != nil {
+	var sold_products []schemas.Product
+	if err := c.BodyParser(&sold_products); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse the request",
 		})
 	}
-	// Iterate over the products and update the stock
-	for _, product := range products {
-		// Get the product from the database
-		name := product.Name
-		materials := product.RawMaterials
-		for _, material := range materials {
-			// Get the material from the database
-			materialName := material.Name
-			quantity := material.Quantity
-			fmt.Println(materialName, quantity)
-			fmt.Println(name, quantity)
-		}
+	// Get the restaurant ID
+	restaurantId := c.Query("restaurant")
+	// Get the restaurant from the database
+	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot get the restaurant",
+		})
 	}
+	// Get the stock from the restaurant
+	stock := restaurant.Stock
+	fmt.Println(stock)
+
+	// Iterate over the products and update the stock
+
 	return c.SendString("Hello, World!")
 }
 
