@@ -74,29 +74,29 @@ func (handler RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
 // @Success 200 {object} schemas.Restaurant
 // @Router /api/v1/restaurant/raw_material [post]
 // @Param Authorization header string true "Authorization" Default
-func (handler RestaurantHandler) AddProductRawMaterial(c *fiber.Ctx) error {
-	restaurantId := c.Query("restaurant")
-	if restaurantId == "" {
-		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
-	}
-
-	var products []schemas.Product
-	if err := c.BodyParser(&products); err != nil {
-		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
-	}
-
-	restaurant, err := handler.DB.GetRestaurant(restaurantId)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
-	}
-
-	db_products := &restaurant.Stock.Products
-
-	addRawMaterials(db_products, products)
-
-	err = handler.DB.ReplaceRestaurant(restaurant)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
-	}
-	return c.Status(200).JSON(restaurant)
-}
+// func (handler RestaurantHandler) AddProductRawMaterial(c *fiber.Ctx) error {
+// 	restaurantId := c.Query("restaurant")
+// 	if restaurantId == "" {
+// 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
+// 	}
+//
+// 	var products []schemas.Product
+// 	if err := c.BodyParser(&products); err != nil {
+// 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
+// 	}
+//
+// 	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+// 	if err != nil {
+// 		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
+// 	}
+//
+// 	db_products := &restaurant.Stock.Products
+//
+// 	addRawMaterials(db_products, products)
+//
+// 	err = handler.DB.ReplaceRestaurant(restaurant)
+// 	if err != nil {
+// 		return c.Status(500).JSON(fiber.Map{"message": "Internal Server Error"})
+// 	}
+// 	return c.Status(200).JSON(restaurant)
+// }
