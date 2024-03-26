@@ -17,12 +17,12 @@ type Product struct {
 
 type Stock struct {
 	RawMaterials []RawMaterial
-	Products     []Product
 }
 
 type Restaurant struct {
-	Id      string
-	Name    string
-	Address string
-	Stock   Stock
+	Id       string
+	Name     string
+	Address  string
+	Products []Product
+	Stock    Stock
 }
