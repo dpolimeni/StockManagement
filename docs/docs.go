@@ -198,6 +198,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/restaurant/raw_material": {
+            "post": {
+                "description": "Add a new raw material to a product on the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Add a new raw material to a product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Products to add raw material",
+                        "name": "products",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schemas.Product"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Restaurant"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/stock": {
             "get": {
                 "description": "Get the stock levels of a restaurant",
@@ -283,6 +334,11 @@ const docTemplate = `{
         },
         "schemas.Product": {
             "type": "object",
+            "required": [
+                "name",
+                "price",
+                "raw_materials"
+            ],
             "properties": {
                 "description": {
                     "type": "string"
@@ -293,7 +349,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "rawMaterials": {
+                "raw_materials": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/schemas.RawMaterial"

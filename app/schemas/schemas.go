@@ -7,10 +7,10 @@ type RawMaterial struct {
 }
 
 type Product struct {
-	Name         string
-	Description  string
-	Price        float64
-	RawMaterials []RawMaterial
+	Name         string        `json:"name" binding:"required"`
+	Description  string        `json:"description,omitempty" bson:"omitempty"`
+	Price        float64       `json:"price" binding:"required"`
+	RawMaterials []RawMaterial `json:"raw_materials" binding:"required"`
 }
 
 type Stock struct {

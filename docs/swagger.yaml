@@ -15,10 +15,14 @@ definitions:
         type: string
       price:
         type: number
-      rawMaterials:
+      raw_materials:
         items:
           $ref: '#/definitions/schemas.RawMaterial'
         type: array
+    required:
+    - name
+    - price
+    - raw_materials
     type: object
   schemas.RawMaterial:
     properties:
@@ -180,6 +184,40 @@ paths:
           schema:
             $ref: '#/definitions/schemas.Restaurant'
       summary: Add a new restaurant
+      tags:
+      - Restaurant
+  /api/v1/restaurant/raw_material:
+    post:
+      consumes:
+      - application/json
+      description: Add a new raw material to a product on the database
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Products to add raw material
+        in: body
+        name: products
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/schemas.Product'
+          type: array
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Restaurant'
+      summary: Add a new raw material to a product
       tags:
       - Restaurant
   /api/v1/stock:

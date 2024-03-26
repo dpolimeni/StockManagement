@@ -102,3 +102,14 @@ func (m *Mongo) GetRestaurant(restaurantId string) (schemas.Restaurant, error) {
 	}
 	return restaurant, nil
 }
+
+func (m *Mongo) ReplaceRestaurant(restaurant schemas.Restaurant) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	collection := m.Client.Database("stockmanagement").Collection("restaurants")
+	_, err := collection.ReplaceOne(ctx, bson.M{"id": restaurant.Id}, restaurant)
+	if err != nil {
+		return err
+	}
+	return nil
+}

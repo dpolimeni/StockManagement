@@ -10,4 +10,5 @@ type Storage interface {
 	NewRestaurant(restaurant schemas.Restaurant) error
 	DeleteRestaurant(restaurantId string) error
 	GetRestaurant(restaurantId string) (schemas.Restaurant, error)
+	ReplaceRestaurant(restaurant schemas.Restaurant) error
 }
