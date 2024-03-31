@@ -380,6 +380,48 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/stock/purchase": {
+            "post": {
+                "description": "Purchase raw materials for the stock",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Purchase raw materials",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Materials to purchase",
+                        "name": "Materials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Purchase"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/stock/sell": {
             "post": {
                 "description": "Sell products from the stock",
@@ -430,6 +472,21 @@ const docTemplate = `{
                 }
             }
         },
+        "schemas.Material": {
+            "type": "object",
+            "required": [
+                "id",
+                "quantity"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
+                }
+            }
+        },
         "schemas.Product": {
             "type": "object",
             "required": [
@@ -459,8 +516,27 @@ const docTemplate = `{
                 }
             }
         },
+        "schemas.Purchase": {
+            "type": "object",
+            "required": [
+                "materials"
+            ],
+            "properties": {
+                "materials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.Material"
+                    }
+                }
+            }
+        },
         "schemas.RawMaterial": {
             "type": "object",
+            "required": [
+                "id",
+                "name",
+                "quantity"
+            ],
             "properties": {
                 "description": {
                     "type": "string"

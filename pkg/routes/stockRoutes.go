@@ -21,4 +21,5 @@ func StockRoutes(app *fiber.App, DB *database.Mongo) {
 	route.Use(middleware.JWTMiddleware())
 
 	route.Get("/", stockhandler.GetStock)
+	route.Post("/purchase", stockhandler.PurchaseMaterial)
 }

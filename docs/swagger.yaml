@@ -7,6 +7,16 @@ definitions:
       username:
         type: string
     type: object
+  schemas.Material:
+    properties:
+      id:
+        type: string
+      quantity:
+        type: number
+    required:
+    - id
+    - quantity
+    type: object
   schemas.Product:
     properties:
       description:
@@ -27,6 +37,15 @@ definitions:
     - price
     - raw_materials
     type: object
+  schemas.Purchase:
+    properties:
+      materials:
+        items:
+          $ref: '#/definitions/schemas.Material'
+        type: array
+    required:
+    - materials
+    type: object
   schemas.RawMaterial:
     properties:
       description:
@@ -39,6 +58,10 @@ definitions:
         type: number
       unit:
         type: string
+    required:
+    - id
+    - name
+    - quantity
     type: object
   schemas.Restaurant:
     properties:
@@ -315,6 +338,35 @@ paths:
       - application/json
       responses: {}
       summary: Get the stock levels
+      tags:
+      - Stock
+  /api/v1/stock/purchase:
+    post:
+      consumes:
+      - application/json
+      description: Purchase raw materials for the stock
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Materials to purchase
+        in: body
+        name: Materials
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.Purchase'
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Purchase raw materials
       tags:
       - Stock
   /api/v1/stock/sell:

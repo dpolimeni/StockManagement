@@ -39,6 +39,48 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(stockLevel)
 }
 
+// Update the stock with product purchases
+// This should be called when raw materials are purchased (at every order)
+// @Summary Purchase raw materials
+// @Description Purchase raw materials for the stock
+// @Tags Stock
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param Materials body schemas.Purchase true "Materials to purchase"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Router /api/v1/stock/purchase [post]
+func (handler StockHandler) PurchaseMaterial(c *fiber.Ctx) error {
+	restaurant := c.Query("restaurant")
+	var purchase schemas.Purchase
+	if err := c.BodyParser(&purchase); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse the request",
+		})
+	}
+	// Get the restaurant from the database
+	db_restaurant, err := handler.DB.GetRestaurant(restaurant)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Cannot get the restaurant",
+		})
+	}
+	// Get the stock from the restaurant
+	stock := db_restaurant.Stock
+	// Iterate over the stock and update the quantities
+	for _, material := range purchase.Materials {
+		for i, db_material := range stock.RawMaterials {
+			if db_material.Id == material.Id {
+				stock.RawMaterials[i].Quantity += material.Quantity
+			}
+		}
+	}
+	// Update the stock in the database
+	db_restaurant.Stock = stock
+	handler.DB.ReplaceRestaurant(db_restaurant)
+	return c.SendString("Stock updated")
+}
+
 // Update the stock with product sells
 // This should be called when the restaurant sell some products
 // @Summary Sell products
@@ -72,12 +114,6 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 
 	// Update the stock with the sold products
 
-	return c.SendString("Hello, World!")
-}
-
-// Update the stock with product purchases
-// This should be called when raw materials are purchased (at every order)
-func (handler RestaurantHandler) PurchaseMaterial(c *fiber.Ctx) error {
 	return c.SendString("Hello, World!")
 }
 
