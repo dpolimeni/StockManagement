@@ -40,7 +40,7 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 }
 
 // Update the stock with product purchases/wastes
-// This should be called when raw materials are purchased (at every order)
+// This should be called when raw materials are purchased/wasted
 // @Summary Purchase/Throw away raw materials
 // @Description Purchase raw materials for the stock
 // @Tags Stock
@@ -50,17 +50,17 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 // @Param StockChange body schemas.StockChange true "Materials to purchase or waste"
 // @Param Authorization header string true "Authorization" Default(Bearer )
 // @Router /api/v1/stock/update [post]
-func (handler StockHandler) PurchaseMaterial(c *fiber.Ctx) error {
+func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 	restaurant := c.Query("restaurant")
-	var purchase schemas.StockChange
-	if err := c.BodyParser(&purchase); err != nil {
+	var stock_change schemas.StockChange
+	if err := c.BodyParser(&stock_change); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse the request",
 		})
 	}
 
 	// Check if the type is purchase or waste
-	change_type := purchase.Type
+	change_type := stock_change.Type
 	if change_type != "purchase" && change_type != "waste" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid type",
@@ -77,7 +77,7 @@ func (handler StockHandler) PurchaseMaterial(c *fiber.Ctx) error {
 	// Get the stock from the restaurant
 	stock := db_restaurant.Stock
 	// Iterate over the stock and update the quantities
-	for _, material := range purchase.Materials {
+	for _, material := range stock_change.Materials {
 		for i, db_material := range stock.RawMaterials {
 			if db_material.Id == material.Id {
 				stock.RawMaterials[i].Quantity += material.Quantity * schemas.TypeMap[change_type]
