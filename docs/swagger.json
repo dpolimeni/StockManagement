@@ -112,6 +112,44 @@
             }
         },
         "/api/v1/restaurant": {
+            "get": {
+                "description": "Get a restaurant from the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Get a restaurant",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Restaurant"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Add a new restaurant to the database",
                 "consumes": [
@@ -187,6 +225,65 @@
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/restaurant/materials/assign": {
+            "put": {
+                "description": "Assign raw materials to a product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Restaurant"
+                ],
+                "summary": "Assign raw materials to a product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Raw materials to assign",
+                        "name": "raw_materials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schemas.RawMaterial"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Restaurant"
                         }
                     }
                 }

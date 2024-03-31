@@ -1,11 +1,11 @@
 package schemas
 
 type RawMaterial struct {
-	Id          string
-	Name        string
-	Description string
-	Quantity    float64
-	Unit        string
+	Id          string  `json:"id" binding:"required"`
+	Name        string  `json:"name" binding:"required"`
+	Description string  `json:"description,omitempty" bson:"description"`
+	Quantity    float64 `json:"quantity" binding:"required"`
+	Unit        string  `json:"unit,omitempty" bson:"unit"`
 }
 
 type Product struct {

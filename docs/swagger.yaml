@@ -166,6 +166,32 @@ paths:
       summary: Delete a restaurant
       tags:
       - Restaurant
+    get:
+      consumes:
+      - application/json
+      description: Get a restaurant from the database
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Restaurant'
+      summary: Get a restaurant
+      tags:
+      - Restaurant
     post:
       consumes:
       - application/json
@@ -191,6 +217,46 @@ paths:
           schema:
             $ref: '#/definitions/schemas.Restaurant'
       summary: Add a new restaurant
+      tags:
+      - Restaurant
+  /api/v1/restaurant/materials/assign:
+    put:
+      consumes:
+      - application/json
+      description: Assign raw materials to a product
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Product ID
+        in: query
+        name: product
+        required: true
+        type: string
+      - description: Raw materials to assign
+        in: body
+        name: raw_materials
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/schemas.RawMaterial'
+          type: array
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.Restaurant'
+      summary: Assign raw materials to a product
       tags:
       - Restaurant
   /api/v1/restaurant/materials/create:

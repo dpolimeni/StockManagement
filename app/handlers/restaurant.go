@@ -13,6 +13,27 @@ type RestaurantHandler struct {
 	DB database.Storage
 }
 
+// GetRestaurant godoc
+// @Summary Get a restaurant
+// @Description Get a restaurant from the database
+// @Tags Restaurant
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Success 200 {object} schemas.Restaurant
+// @Router /api/v1/restaurant [get]
+func (handler RestaurantHandler) GetRestaurant(c *fiber.Ctx) error {
+	restaurantId := c.Query("restaurant")
+
+	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		error_string := fmt.Sprintf("Internal Server Error %s", err.Error())
+		return c.Status(500).JSON(fiber.Map{"message": error_string})
+	}
+	return c.Status(200).JSON(restaurant)
+}
+
 // @Summary Add a new restaurant
 // @Description Add a new restaurant to the database
 // @Tags Restaurant
@@ -51,9 +72,6 @@ func (handler RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
 // @Param Authorization header string true "Authorization" Default(Bearer )
 func (handler RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
 	restaurantId := c.Query("restaurant")
-	if restaurantId == "" {
-		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
-	}
 
 	err := handler.DB.DeleteRestaurant(restaurantId)
 	if err != nil {
@@ -76,9 +94,6 @@ func (handler RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
 // @Router /api/v1/restaurant/materials/create [post]
 func (handler RestaurantHandler) AddRawMaterials(c *fiber.Ctx) error {
 	restaurantId := c.Query("restaurant")
-	if restaurantId == "" {
-		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
-	}
 
 	restaurant, err := handler.DB.GetRestaurant(restaurantId)
 	if err != nil {
@@ -103,4 +118,47 @@ func (handler RestaurantHandler) AddRawMaterials(c *fiber.Ctx) error {
 	handler.DB.ReplaceRestaurant(restaurant)
 
 	return c.Status(200).JSON(restaurant)
+}
+
+// Assign Materials godoc
+// @Summary Assign raw materials to a product
+// @Description Assign raw materials to a product
+// @Tags Restaurant
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param product query string true "Product ID"
+// @Param raw_materials body []schemas.RawMaterial true "Raw materials to assign"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Success 200 {object} schemas.Restaurant
+// @Router /api/v1/restaurant/materials/assign [put]
+func (handler RestaurantHandler) AssignMaterials(c *fiber.Ctx) error {
+	restaurantId := c.Query("restaurant")
+
+	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		error_string := fmt.Sprintf("Internal Server Error %s", err.Error())
+		return c.Status(500).JSON(fiber.Map{"message": error_string})
+	}
+
+	var rawMaterials []schemas.RawMaterial
+	if err := c.BodyParser(&rawMaterials); err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": "Invalid request body"})
+	}
+
+	productId := c.Query("product")
+
+	// Assign the raw materials to the product
+	for i, product := range restaurant.Products {
+		if product.Id == productId {
+			restaurant.Products[i].RawMaterials = rawMaterials
+			// Extit the loop
+			break
+		}
+	}
+
+	handler.DB.ReplaceRestaurant(restaurant)
+
+	return c.Status(200).JSON(restaurant)
+
 }

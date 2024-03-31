@@ -24,7 +24,7 @@ func addRawMaterials(db_materials []schemas.RawMaterial, new_materials []schemas
 	return db_materials, nil
 }
 
-func sellProducts(db_materials []schemas.RawMaterial, sold_products []schemas.Product) ([]schemas.RawMaterial, error) {
+func sellProduct(db_materials []schemas.RawMaterial, sold_products []schemas.Product) ([]schemas.RawMaterial, error) {
 	// Iterate over the sold products and remove the raw materials from the stock
 	for _, sold_product := range sold_products {
 		for _, raw_material := range sold_product.RawMaterials {
