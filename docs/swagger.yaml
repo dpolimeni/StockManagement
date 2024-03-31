@@ -11,6 +11,8 @@ definitions:
     properties:
       description:
         type: string
+      id:
+        type: string
       name:
         type: string
       price:
@@ -20,6 +22,7 @@ definitions:
           $ref: '#/definitions/schemas.RawMaterial'
         type: array
     required:
+    - id
     - name
     - price
     - raw_materials
@@ -27,6 +30,8 @@ definitions:
   schemas.RawMaterial:
     properties:
       description:
+        type: string
+      id:
         type: string
       name:
         type: string
@@ -41,15 +46,15 @@ definitions:
         type: string
       name:
         type: string
+      products:
+        items:
+          $ref: '#/definitions/schemas.Product'
+        type: array
       stock:
         $ref: '#/definitions/schemas.Stock'
     type: object
   schemas.Stock:
     properties:
-      products:
-        items:
-          $ref: '#/definitions/schemas.Product'
-        type: array
       rawMaterials:
         items:
           $ref: '#/definitions/schemas.RawMaterial'
@@ -186,26 +191,27 @@ paths:
       summary: Add a new restaurant
       tags:
       - Restaurant
-  /api/v1/restaurant/raw_material:
+  /api/v1/restaurant/materials/create:
     post:
       consumes:
       - application/json
-      description: Add a new raw material to a product on the database
+      description: Add new raw materials to the database
       parameters:
+      - description: Raw materials to add
+        in: body
+        name: raw_materials
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/schemas.RawMaterial'
+          type: array
       - description: Restaurant ID
         in: query
         name: restaurant
         required: true
         type: string
-      - description: Products to add raw material
-        in: body
-        name: products
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/schemas.Product'
-          type: array
-      - description: Authorization
+      - default: Bearer
+        description: Authorization
         in: header
         name: Authorization
         required: true
@@ -217,7 +223,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/schemas.Restaurant'
-      summary: Add a new raw material to a product
+      summary: Create a new raw materials
       tags:
       - Restaurant
   /api/v1/stock:

@@ -63,6 +63,48 @@ func (handler RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"message": "Deleted"})
 }
 
+// Create Raw Material godoc
+// @Summary Add new raw materials
+// @Description Add new raw materials to the database
+// @Tags Restaurant
+// @Accept json
+// @Produce json
+// @Param raw_materials body []schemas.RawMaterial true "Raw materials to add"
+// @Param restaurant query string true "Restaurant ID"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Success 200 {object} schemas.Restaurant
+// @Router /api/v1/restaurant/materials/create [post]
+func (handler RestaurantHandler) AddRawMaterials(c *fiber.Ctx) error {
+	restaurantId := c.Query("restaurant")
+	if restaurantId == "" {
+		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
+	}
+
+	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		error_string := fmt.Sprintf("Internal Server Error %s", err.Error())
+		return c.Status(500).JSON(fiber.Map{"message": error_string})
+	}
+
+	var rawMaterials []schemas.RawMaterial
+	if err := c.BodyParser(&rawMaterials); err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": "Invalid request body"})
+	}
+
+	dbRawMaterials := restaurant.Stock.RawMaterials
+
+	dbRawMaterials, err = addRawMaterials(dbRawMaterials, rawMaterials)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": err.Error()})
+	}
+
+	// Update the restaurant with the new raw materials
+	restaurant.Stock.RawMaterials = dbRawMaterials
+	handler.DB.ReplaceRestaurant(restaurant)
+
+	return c.Status(200).JSON(restaurant)
+}
+
 // Add product raw material godoc
 // @Summary Add a new raw material to a product
 // @Description Add a new raw material to a product on the database

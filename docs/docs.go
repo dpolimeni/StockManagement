@@ -198,9 +198,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/restaurant/raw_material": {
+        "/api/v1/restaurant/materials/create": {
             "post": {
-                "description": "Add a new raw material to a product on the database",
+                "description": "Add new raw materials to the database",
                 "consumes": [
                     "application/json"
                 ],
@@ -210,8 +210,20 @@ const docTemplate = `{
                 "tags": [
                     "Restaurant"
                 ],
-                "summary": "Add a new raw material to a product",
+                "summary": "Create a new raw materials",
                 "parameters": [
+                    {
+                        "description": "Raw materials to add",
+                        "name": "raw_materials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/schemas.RawMaterial"
+                            }
+                        }
+                    },
                     {
                         "type": "string",
                         "description": "Restaurant ID",
@@ -220,19 +232,8 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Products to add raw material",
-                        "name": "products",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/schemas.Product"
-                            }
-                        }
-                    },
-                    {
                         "type": "string",
+                        "default": "Bearer",
                         "description": "Authorization",
                         "name": "Authorization",
                         "in": "header",
@@ -335,12 +336,16 @@ const docTemplate = `{
         "schemas.Product": {
             "type": "object",
             "required": [
+                "id",
                 "name",
                 "price",
                 "raw_materials"
             ],
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {
@@ -363,6 +368,9 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -383,6 +391,12 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.Product"
+                    }
+                },
                 "stock": {
                     "$ref": "#/definitions/schemas.Stock"
                 }
@@ -391,12 +405,6 @@ const docTemplate = `{
         "schemas.Stock": {
             "type": "object",
             "properties": {
-                "products": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schemas.Product"
-                    }
-                },
                 "rawMaterials": {
                     "type": "array",
                     "items": {
