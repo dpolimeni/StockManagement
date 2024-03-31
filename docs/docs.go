@@ -210,7 +210,7 @@ const docTemplate = `{
                 "tags": [
                     "Restaurant"
                 ],
-                "summary": "Create a new raw materials",
+                "summary": "Add new raw materials",
                 "parameters": [
                     {
                         "description": "Raw materials to add",
@@ -376,6 +376,9 @@ const docTemplate = `{
                 },
                 "quantity": {
                     "type": "number"
+                },
+                "unit": {
+                    "type": "string"
                 }
             }
         },

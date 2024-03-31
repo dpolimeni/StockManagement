@@ -39,11 +39,6 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(stockLevel)
 }
 
-// Initial handler to populate the stock
-func (handler RestaurantHandler) CreateStock(c *fiber.Ctx) error {
-	return c.SendString("Hello, World!")
-}
-
 // Update the stock with product sells
 // This should be called when the restaurant sell some products
 // @Summary Sell products

@@ -37,6 +37,8 @@ definitions:
         type: string
       quantity:
         type: number
+      unit:
+        type: string
     type: object
   schemas.Restaurant:
     properties:
@@ -223,7 +225,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/schemas.Restaurant'
-      summary: Create a new raw materials
+      summary: Add new raw materials
       tags:
       - Restaurant
   /api/v1/stock:

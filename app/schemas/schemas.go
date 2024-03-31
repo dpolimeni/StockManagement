@@ -5,6 +5,7 @@ type RawMaterial struct {
 	Name        string
 	Description string
 	Quantity    float64
+	Unit        string
 }
 
 type Product struct {

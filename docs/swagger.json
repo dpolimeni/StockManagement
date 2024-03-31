@@ -204,7 +204,7 @@
                 "tags": [
                     "Restaurant"
                 ],
-                "summary": "Create a new raw materials",
+                "summary": "Add new raw materials",
                 "parameters": [
                     {
                         "description": "Raw materials to add",
@@ -370,6 +370,9 @@
                 },
                 "quantity": {
                     "type": "number"
+                },
+                "unit": {
+                    "type": "string"
                 }
             }
         },
