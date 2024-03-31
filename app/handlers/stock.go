@@ -70,7 +70,7 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 	stock := restaurant.Stock
 	fmt.Println(stock)
 
-	// Iterate over the products and update the stock
+	// Update the stock with the sold products
 
 	return c.SendString("Hello, World!")
 }
