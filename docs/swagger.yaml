@@ -37,15 +37,6 @@ definitions:
     - price
     - raw_materials
     type: object
-  schemas.Purchase:
-    properties:
-      materials:
-        items:
-          $ref: '#/definitions/schemas.Material'
-        type: array
-    required:
-    - materials
-    type: object
   schemas.RawMaterial:
     properties:
       description:
@@ -84,6 +75,19 @@ definitions:
         items:
           $ref: '#/definitions/schemas.RawMaterial'
         type: array
+    type: object
+  schemas.StockChange:
+    properties:
+      materials:
+        items:
+          $ref: '#/definitions/schemas.Material'
+        type: array
+      type:
+        description: Must be purchase or waste
+        type: string
+    required:
+    - materials
+    - type
     type: object
 host: localhost:8080
 info:
@@ -340,35 +344,6 @@ paths:
       summary: Get the stock levels
       tags:
       - Stock
-  /api/v1/stock/purchase:
-    post:
-      consumes:
-      - application/json
-      description: Purchase raw materials for the stock
-      parameters:
-      - description: Restaurant ID
-        in: query
-        name: restaurant
-        required: true
-        type: string
-      - description: Materials to purchase
-        in: body
-        name: Materials
-        required: true
-        schema:
-          $ref: '#/definitions/schemas.Purchase'
-      - default: Bearer
-        description: Authorization
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Purchase raw materials
-      tags:
-      - Stock
   /api/v1/stock/sell:
     post:
       consumes:
@@ -392,6 +367,35 @@ paths:
       - application/json
       responses: {}
       summary: Sell products
+      tags:
+      - Stock
+  /api/v1/stock/update:
+    post:
+      consumes:
+      - application/json
+      description: Purchase raw materials for the stock
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Materials to purchase or waste
+        in: body
+        name: StockChange
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.StockChange'
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Purchase/Throw away raw materials
       tags:
       - Stock
 swagger: "2.0"

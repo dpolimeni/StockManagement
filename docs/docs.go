@@ -380,48 +380,6 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/stock/purchase": {
-            "post": {
-                "description": "Purchase raw materials for the stock",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Stock"
-                ],
-                "summary": "Purchase raw materials",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Restaurant ID",
-                        "name": "restaurant",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "description": "Materials to purchase",
-                        "name": "Materials",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schemas.Purchase"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "default": "Bearer",
-                        "description": "Authorization",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
         "/api/v1/stock/sell": {
             "post": {
                 "description": "Sell products from the stock",
@@ -454,6 +412,48 @@ const docTemplate = `{
                                 "$ref": "#/definitions/schemas.Product"
                             }
                         }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/stock/update": {
+            "post": {
+                "description": "Purchase raw materials for the stock",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Purchase/Throw away raw materials",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Materials to purchase or waste",
+                        "name": "StockChange",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.StockChange"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {}
@@ -516,20 +516,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schemas.Purchase": {
-            "type": "object",
-            "required": [
-                "materials"
-            ],
-            "properties": {
-                "materials": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schemas.Material"
-                    }
-                }
-            }
-        },
         "schemas.RawMaterial": {
             "type": "object",
             "required": [
@@ -586,6 +572,25 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/schemas.RawMaterial"
                     }
+                }
+            }
+        },
+        "schemas.StockChange": {
+            "type": "object",
+            "required": [
+                "materials",
+                "type"
+            ],
+            "properties": {
+                "materials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.Material"
+                    }
+                },
+                "type": {
+                    "description": "Must be purchase or waste",
+                    "type": "string"
                 }
             }
         }

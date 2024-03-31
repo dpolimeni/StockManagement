@@ -39,25 +39,34 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(stockLevel)
 }
 
-// Update the stock with product purchases
+// Update the stock with product purchases/wastes
 // This should be called when raw materials are purchased (at every order)
-// @Summary Purchase raw materials
+// @Summary Purchase/Throw away raw materials
 // @Description Purchase raw materials for the stock
 // @Tags Stock
 // @Accept json
 // @Produce json
 // @Param restaurant query string true "Restaurant ID"
-// @Param Materials body schemas.Purchase true "Materials to purchase"
+// @Param StockChange body schemas.StockChange true "Materials to purchase or waste"
 // @Param Authorization header string true "Authorization" Default(Bearer )
-// @Router /api/v1/stock/purchase [post]
+// @Router /api/v1/stock/update [post]
 func (handler StockHandler) PurchaseMaterial(c *fiber.Ctx) error {
 	restaurant := c.Query("restaurant")
-	var purchase schemas.Purchase
+	var purchase schemas.StockChange
 	if err := c.BodyParser(&purchase); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse the request",
 		})
 	}
+
+	// Check if the type is purchase or waste
+	change_type := purchase.Type
+	if change_type != "purchase" && change_type != "waste" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid type",
+		})
+	}
+
 	// Get the restaurant from the database
 	db_restaurant, err := handler.DB.GetRestaurant(restaurant)
 	if err != nil {
@@ -71,7 +80,7 @@ func (handler StockHandler) PurchaseMaterial(c *fiber.Ctx) error {
 	for _, material := range purchase.Materials {
 		for i, db_material := range stock.RawMaterials {
 			if db_material.Id == material.Id {
-				stock.RawMaterials[i].Quantity += material.Quantity
+				stock.RawMaterials[i].Quantity += material.Quantity * schemas.TypeMap[change_type]
 			}
 		}
 	}

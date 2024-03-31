@@ -5,6 +5,12 @@ type Material struct {
 	Quantity float64 `json:"quantity" binding:"required"`
 }
 
-type Purchase struct {
+var TypeMap = map[string]float64{
+	"purchase": 1,
+	"waste":    -1,
+}
+
+type StockChange struct {
 	Materials []Material `json:"materials" binding:"required"`
+	Type      string     `json:"type" binding:"required"` // Must be purchase or waste
 }
