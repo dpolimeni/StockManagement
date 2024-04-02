@@ -409,7 +409,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/schemas.Product"
+                                "$ref": "#/definitions/schemas.SoldProducts"
                             }
                         }
                     }
@@ -561,6 +561,25 @@ const docTemplate = `{
                 },
                 "stock": {
                     "$ref": "#/definitions/schemas.Stock"
+                }
+            }
+        },
+        "schemas.SoldProducts": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "quantity"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number"
                 }
             }
         },

@@ -69,6 +69,19 @@ definitions:
       stock:
         $ref: '#/definitions/schemas.Stock'
     type: object
+  schemas.SoldProducts:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      quantity:
+        type: number
+    required:
+    - id
+    - name
+    - quantity
+    type: object
   schemas.Stock:
     properties:
       rawMaterials:
@@ -361,7 +374,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/schemas.Product'
+            $ref: '#/definitions/schemas.SoldProducts'
           type: array
       produces:
       - application/json

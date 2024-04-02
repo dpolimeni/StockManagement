@@ -65,5 +65,17 @@ func main() {
 // @Success 200 {object} map[string]interface{}
 // @Router / [get]
 func HealthCheck(c *fiber.Ctx) error {
-	return c.SendString("Hello, World!")
+	test_map := map[string]float64{
+		"status": 200,
+		"other":  0,
+	}
+
+	switch test_map["statusss"] {
+	case 200:
+		fmt.Println("Server is running")
+		return c.Status(200).JSON(test_map)
+	default:
+		fmt.Println("Server is not running")
+		return c.Status(500).JSON(test_map)
+	}
 }

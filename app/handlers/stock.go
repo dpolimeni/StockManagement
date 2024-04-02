@@ -3,7 +3,6 @@ package handlers
 import (
 	"dpolimeni/stockmanagement/app/schemas"
 	"dpolimeni/stockmanagement/platform/database"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -98,11 +97,11 @@ func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param restaurant query string true "Restaurant ID"
-// @Param Products body []schemas.Product true "Products to sell"
+// @Param Products body []schemas.SoldProducts true "Products to sell"
 // @Router /api/v1/stock/sell [post]
 func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 	// Get the list of products
-	var sold_products []schemas.Product
+	var sold_products []schemas.SoldProducts
 	if err := c.BodyParser(&sold_products); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse the request",
@@ -118,12 +117,17 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 		})
 	}
 	// Get the stock from the restaurant
-	stock := restaurant.Stock
-	fmt.Println(stock)
+	err = sellProduct(&restaurant, sold_products)
+	if err != nil {
+		err_string := err.Error()
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": err_string,
+		})
+	}
+	// Update the restaurant in the database
+	handler.DB.ReplaceRestaurant(restaurant)
 
-	// Update the stock with the sold products
-
-	return c.SendString("Hello, World!")
+	return c.SendString("Products sold")
 }
 
 // Update the stock with real levels

@@ -24,22 +24,37 @@ func addRawMaterials(db_materials []schemas.RawMaterial, new_materials []schemas
 	return db_materials, nil
 }
 
-func sellProduct(db_materials []schemas.RawMaterial, sold_products []schemas.Product) ([]schemas.RawMaterial, error) {
-	// Iterate over the sold products and remove the raw materials from the stock
-	for _, sold_product := range sold_products {
-		for _, raw_material := range sold_product.RawMaterials {
-			found := false
-			for i, db_material := range db_materials {
-				if db_material.Id == raw_material.Id {
-					db_materials[i].Quantity -= raw_material.Quantity
-					found = true
+func sellProduct(restaurant *schemas.Restaurant, soldProducts []schemas.SoldProducts) error {
+	// For each sold product update the stock
+	productsSold := map[string]float64{}
+	for _, product := range soldProducts {
+		productsSold[product.Id] = product.Quantity
+	}
+
+	// Check if all the products are in the restaurant
+	productsCheck := map[string]bool{}
+	for _, product := range restaurant.Products {
+		switch productsSold[product.Id] {
+		case 0:
+			continue
+		default:
+			productsCheck[product.Id] = true
+			for _, productMaterial := range product.RawMaterials {
+				for i, dbRawMaterial := range restaurant.Stock.RawMaterials {
+					if productMaterial.Id == dbRawMaterial.Id {
+						restaurant.Stock.RawMaterials[i].Quantity -= productMaterial.Quantity * productsSold[product.Id]
+					}
 				}
-			}
-			if !found {
-				error_string := "Raw material not found: " + raw_material.Name
-				return nil, errors.New(error_string)
 			}
 		}
 	}
-	return db_materials, nil
+	// Check if all the products are in the restaurant
+	for _, product := range soldProducts {
+		if _, ok := productsCheck[product.Id]; !ok {
+			error_string := "Product not found: " + product.Name
+			return errors.New(error_string)
+		}
+	}
+
+	return nil
 }

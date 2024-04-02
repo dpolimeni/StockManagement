@@ -14,3 +14,9 @@ type StockChange struct {
 	Materials []Material `json:"materials" binding:"required"`
 	Type      string     `json:"type" binding:"required"` // Must be purchase or waste
 }
+
+type SoldProducts struct {
+	Id       string  `json:"id" binding:"required"`
+	Name     string  `json:"name" binding:"required"`
+	Quantity float64 `json:"quantity" binding:"required"`
+}
