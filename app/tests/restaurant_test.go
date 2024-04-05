@@ -64,8 +64,9 @@ func TestAddRestaurant(t *testing.T) {
 	currentDir, _ := os.Getwd()
 	projectDir := filepath.Dir(filepath.Dir(currentDir))
 	err := godotenv.Load(filepath.Join(projectDir, ".env"))
-
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	app := fiber.New()
 	mongo := InitApp(app)
 	routes.RestaurantRoutes(app, mongo)
@@ -119,6 +120,38 @@ func TestAddRestaurant(t *testing.T) {
 		fmt.Println(err)
 	}
 	// If response status code is not 200 then we have an error
+	if resp.StatusCode != 200 {
+		t.Errorf("Status code is not 200")
+	}
+}
+
+func TestAddRawMaterials(t *testing.T) {
+	currentDir, _ := os.Getwd()
+	projectDir := filepath.Dir(filepath.Dir(currentDir))
+	err := godotenv.Load(filepath.Join(projectDir, ".env"))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	app := fiber.New()
+	mongo := InitApp(app)
+	mongo.GetClient()
+	routes.RestaurantRoutes(app, mongo)
+	token := GetToken(app)
+
+	payload := strings.NewReader(`[
+		{
+			"description": "string",
+			"id": "string",
+			"name": "string",
+			"quantity": 0,
+			"unit": "string"
+		}
+	]`)
+	req := httptest.NewRequest("POST", "/api/v1/restaurant/materials/create?restaurant=string", payload)
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	resp, _ := app.Test(req, -1)
 	if resp.StatusCode != 200 {
 		t.Errorf("Status code is not 200")
 	}
