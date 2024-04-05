@@ -17,13 +17,13 @@ type Product struct {
 }
 
 type Stock struct {
-	RawMaterials []RawMaterial
+	RawMaterials []RawMaterial `json:"raw_materials" binding:"required"`
 }
 
 type Restaurant struct {
-	Id       string
-	Name     string
-	Address  string
-	Products []Product
-	Stock    Stock
+	Id       string    `json:"id" binding:"required"`
+	Name     string    `json:"name" binding:"required"`
+	Address  string    `json:"address" binding:"required"`
+	Products []Product `json:"products" binding:"required"`
+	Stock    Stock     `json:"stock" binding:"required"`
 }
