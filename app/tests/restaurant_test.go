@@ -72,6 +72,22 @@ func TestAddRestaurant(t *testing.T) {
 	app, mongo := InitApp()
 	routes.RestaurantRoutes(app, &mongo)
 	token := GetToken(app)
-	fmt.Println(token)
+	// If token is empty then we have an error
+	if token == "" {
+		t.Errorf("Token is empty")
+	}
 
+	// Create a Restaurant object with name and address
+	payload := strings.NewReader(`{
+		"name": "Test Restaurant",
+		"address": "Test Address"
+	}`)
+	req := httptest.NewRequest("POST", "/api/v1/restaurant", payload)
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	resp, err := app.Test(req)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(resp)
 }
