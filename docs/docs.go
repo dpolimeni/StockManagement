@@ -493,7 +493,7 @@ const docTemplate = `{
                 "id",
                 "name",
                 "price",
-                "raw_materials"
+                "rawMaterials"
             ],
             "properties": {
                 "description": {
@@ -508,7 +508,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "raw_materials": {
+                "rawMaterials": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/schemas.RawMaterial"
@@ -543,6 +543,13 @@ const docTemplate = `{
         },
         "schemas.Restaurant": {
             "type": "object",
+            "required": [
+                "address",
+                "id",
+                "name",
+                "products",
+                "stock"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -585,6 +592,9 @@ const docTemplate = `{
         },
         "schemas.Stock": {
             "type": "object",
+            "required": [
+                "rawMaterials"
+            ],
             "properties": {
                 "rawMaterials": {
                     "type": "array",

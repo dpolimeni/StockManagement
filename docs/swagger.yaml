@@ -27,7 +27,7 @@ definitions:
         type: string
       price:
         type: number
-      raw_materials:
+      rawMaterials:
         items:
           $ref: '#/definitions/schemas.RawMaterial'
         type: array
@@ -35,7 +35,7 @@ definitions:
     - id
     - name
     - price
-    - raw_materials
+    - rawMaterials
     type: object
   schemas.RawMaterial:
     properties:
@@ -68,6 +68,12 @@ definitions:
         type: array
       stock:
         $ref: '#/definitions/schemas.Stock'
+    required:
+    - address
+    - id
+    - name
+    - products
+    - stock
     type: object
   schemas.SoldProducts:
     properties:
@@ -88,6 +94,8 @@ definitions:
         items:
           $ref: '#/definitions/schemas.RawMaterial'
         type: array
+    required:
+    - rawMaterials
     type: object
   schemas.StockChange:
     properties:

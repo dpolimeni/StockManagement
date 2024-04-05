@@ -487,7 +487,7 @@
                 "id",
                 "name",
                 "price",
-                "raw_materials"
+                "rawMaterials"
             ],
             "properties": {
                 "description": {
@@ -502,7 +502,7 @@
                 "price": {
                     "type": "number"
                 },
-                "raw_materials": {
+                "rawMaterials": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/schemas.RawMaterial"
@@ -537,6 +537,13 @@
         },
         "schemas.Restaurant": {
             "type": "object",
+            "required": [
+                "address",
+                "id",
+                "name",
+                "products",
+                "stock"
+            ],
             "properties": {
                 "address": {
                     "type": "string"
@@ -579,6 +586,9 @@
         },
         "schemas.Stock": {
             "type": "object",
+            "required": [
+                "rawMaterials"
+            ],
             "properties": {
                 "rawMaterials": {
                     "type": "array",

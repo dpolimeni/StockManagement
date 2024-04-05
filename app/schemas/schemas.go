@@ -13,11 +13,11 @@ type Product struct {
 	Name         string        `json:"name" binding:"required"`
 	Description  string        `json:"description,omitempty" bson:"description"`
 	Price        float64       `json:"price" binding:"required"`
-	RawMaterials []RawMaterial `json:"rawmaterials" binding:"required"`
+	RawMaterials []RawMaterial `json:"rawMaterials" binding:"required"`
 }
 
 type Stock struct {
-	RawMaterials []RawMaterial `json:"rawmaterials" binding:"required"`
+	RawMaterials []RawMaterial `json:"rawMaterials" binding:"required"`
 }
 
 type Restaurant struct {
