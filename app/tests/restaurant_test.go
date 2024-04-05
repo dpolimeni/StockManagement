@@ -63,9 +63,6 @@ func GetToken(app *fiber.App) string {
 func TestAddRestaurant(t *testing.T) {
 	currentDir, _ := os.Getwd()
 	projectDir := filepath.Dir(filepath.Dir(currentDir))
-
-	// Check if we have reached the root dir
-	fmt.Println(projectDir)
 	err := godotenv.Load(filepath.Join(projectDir, ".env"))
 
 	fmt.Println(err)
