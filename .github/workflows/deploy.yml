@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'ase-zen-stock-dev-northit'
         slot-name: 'production'
-        publish-profile: ${{ secrets.APP_PUBBLISH_PROFILE_PROD }}
+        publish-profile: ${{ secrets.APP_PUBBLISH_PROFILE_DEV }}
         images: 'crzenstock.azurecr.io/${{ secrets.CONTAINER_REGISTRY_USERNAME }}/dev/latest:${{ github.sha }}'
