@@ -70,7 +70,7 @@ func HealthCheck(c *fiber.Ctx) error {
 		"other":  0,
 	}
 
-	switch test_map["statusss"] {
+	switch test_map["status"] {
 	case 200:
 		fmt.Println("Server is running")
 		return c.Status(200).JSON(test_map)
