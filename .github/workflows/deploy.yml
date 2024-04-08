@@ -22,7 +22,7 @@ jobs:
     - name: Log in to registry
       uses: docker/login-action@v2
       with:
-        registry: https://crzbnorthit.azurecr.io/
+        registry: https://crzenstock.azurecr.io/
         username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
         password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
 
@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: crzbnorthit.azurecr.io/${{ secrets.CONTAINER_REGISTRY_USERNAME }}/dev/latest:${{ github.sha }}
+        tags: crzenstock.azurecr.io/${{ secrets.CONTAINER_REGISTRY_USERNAME }}/dev/latest:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'ase-zen-stock-dev-northit'
         slot-name: 'production'
         publish-profile: ${{ secrets.APP_PUBBLISH_PROFILE_PROD }}
-        images: 'crzbnorthit.azurecr.io/${{ secrets.CONTAINER_REGISTRY_USERNAME }}/dev/latest:${{ github.sha }}'
+        images: 'crzenstock.azurecr.io/${{ secrets.CONTAINER_REGISTRY_USERNAME }}/dev/latest:${{ github.sha }}'
