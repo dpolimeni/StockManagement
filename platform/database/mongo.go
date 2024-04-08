@@ -49,7 +49,7 @@ func (m *Mongo) AuthorizeUser(username, password string) (bool, error) {
 	// }
 
 	// Get username and password from enviuronment variables
-	envusername := os.Getenv("USERNAME")
+	envusername := os.Getenv("AUTH_USERNAME")
 	envpassword := "$2a$10$coMj77X0nLj8vspt942Wfe3vWwriR72ICHTWAgAvFFARW/IOqza8C" // os.Getenv("HASHED_PASSWORD")
 	fmt.Println(envusername, envpassword)
 
