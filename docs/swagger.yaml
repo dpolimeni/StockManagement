@@ -66,6 +66,15 @@ definitions:
     - name
     - quantity
     type: object
+  schemas.RectifyStock:
+    properties:
+      materials:
+        items:
+          $ref: '#/definitions/schemas.Material'
+        type: array
+    required:
+    - materials
+    type: object
   schemas.Restaurant:
     properties:
       address:
@@ -395,6 +404,35 @@ paths:
       - application/json
       responses: {}
       summary: Get the stock levels
+      tags:
+      - Stock
+  /api/v1/stock/rectify:
+    post:
+      consumes:
+      - application/json
+      description: Update the stock levels of a restaurant
+      parameters:
+      - description: Restaurant ID
+        in: query
+        name: restaurant
+        required: true
+        type: string
+      - description: Updated stock levels
+        in: body
+        name: RectifyStock
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.RectifyStock'
+      - default: Bearer
+        description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Update stock levels
       tags:
       - Stock
   /api/v1/stock/sell:

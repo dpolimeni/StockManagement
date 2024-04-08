@@ -16,10 +16,9 @@ func StockRoutes(app *fiber.App, DB *database.Mongo) {
 		DB: DB,
 	}
 
-	// Sell route
-	route.Post("/sell", stockhandler.SellProducts)
 	route.Use(middleware.JWTMiddleware())
-
+	route.Post("/sell", stockhandler.SellProducts)
 	route.Get("/", stockhandler.GetStock)
 	route.Post("/update", stockhandler.UpdateMaterials)
+	route.Post("/rectify", stockhandler.RectifyStock)
 }

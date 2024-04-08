@@ -144,6 +144,35 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 
 // Update the stock with real levels
 // This should be called when the stock is updated after a physical count
-func (handler RestaurantHandler) UpdateStock(c *fiber.Ctx) error {
-	return c.SendString("Hello, World!")
+// @Summary Update stock levels
+// @Description Update the stock levels of a restaurant
+// @Tags Stock
+// @Accept json
+// @Produce json
+// @Param restaurant query string true "Restaurant ID"
+// @Param RectifyStock body schemas.RectifyStock true "Updated stock levels"
+// @Param Authorization header string true "Authorization" Default(Bearer )
+// @Router /api/v1/stock/rectify [post]
+func (handler StockHandler) RectifyStock(c *fiber.Ctx) error {
+	restaurantId := c.Query("restaurant")
+
+	restaurant, err := handler.DB.GetRestaurant(restaurantId)
+	if err != nil {
+		error_string := fmt.Sprintf("Restaurant %s not found", restaurantId)
+		return c.Status(400).JSON(fiber.Map{"message": error_string})
+	}
+
+	var stock schemas.RectifyStock
+	if err := c.BodyParser(&stock); err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
+	}
+
+	err = rectifyStock(&restaurant, stock)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"message": err.Error()})
+	}
+
+	handler.DB.ReplaceRestaurant(restaurant)
+	return c.Status(200).JSON(fiber.Map{"message": "Stock updated", "stock": restaurant.Stock})
+
 }

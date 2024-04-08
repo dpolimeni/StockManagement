@@ -15,6 +15,10 @@ type StockChange struct {
 	Type      string     `json:"type" binding:"required"` // Must be purchase or waste
 }
 
+type RectifyStock struct {
+	Materials []Material `json:"materials" binding:"required"`
+}
+
 type SoldProducts struct {
 	Id       string  `json:"id" binding:"required"`       // The id of the product
 	Name     string  `json:"name" binding:"required"`     // The name of the product

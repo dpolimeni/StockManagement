@@ -67,3 +67,15 @@ func sellProduct(restaurant *schemas.Restaurant, soldProducts []schemas.SoldProd
 
 	return alertMaterials, nil
 }
+
+func rectifyStock(restaurant *schemas.Restaurant, stockChange schemas.RectifyStock) error {
+	// Iterate over the stock and update the quantities
+	for _, material := range stockChange.Materials {
+		for i, db_material := range restaurant.Stock.RawMaterials {
+			if db_material.Id == material.Id {
+				restaurant.Stock.RawMaterials[i].Quantity = material.Quantity
+			}
+		}
+	}
+	return nil
+}

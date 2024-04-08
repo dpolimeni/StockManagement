@@ -380,6 +380,48 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/stock/rectify": {
+            "post": {
+                "description": "Update the stock levels of a restaurant",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Update stock levels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Restaurant ID",
+                        "name": "restaurant",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated stock levels",
+                        "name": "RectifyStock",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RectifyStock"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer",
+                        "description": "Authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/stock/sell": {
             "post": {
                 "description": "Sell products from the stock",
@@ -554,6 +596,20 @@ const docTemplate = `{
                 },
                 "unit": {
                     "type": "string"
+                }
+            }
+        },
+        "schemas.RectifyStock": {
+            "type": "object",
+            "required": [
+                "materials"
+            ],
+            "properties": {
+                "materials": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.Material"
+                    }
                 }
             }
         },
