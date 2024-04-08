@@ -39,12 +39,12 @@ func (handler RestaurantHandler) GetRestaurant(c *fiber.Ctx) error {
 // @Tags Restaurant
 // @Accept json
 // @Produce json
-// @Param restaurant body schemas.Restaurant true "Restaurant object that needs to be added"
+// @Param restaurant body schemas.RestaurantCreate true "Restaurant object that needs to be added"
 // @Success 200 {object} schemas.Restaurant
 // @Router /api/v1/restaurant [post]
 // @Param Authorization header string true "Authorization" Default(Bearer )
 func (handler RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
-	var restaurant schemas.Restaurant
+	var restaurant schemas.RestaurantCreate
 	if err := c.BodyParser(&restaurant); err != nil {
 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request"})
 	}
@@ -128,7 +128,7 @@ func (handler RestaurantHandler) AddRawMaterials(c *fiber.Ctx) error {
 // @Produce json
 // @Param restaurant query string true "Restaurant ID"
 // @Param product query string true "Product ID"
-// @Param raw_materials body []schemas.RawMaterial true "Raw materials to assign"
+// @Param raw_materials body []schemas.Material true "Raw materials to assign"
 // @Param Authorization header string true "Authorization" Default(Bearer )
 // @Success 200 {object} schemas.Restaurant
 // @Router /api/v1/restaurant/materials/assign [put]
@@ -141,7 +141,7 @@ func (handler RestaurantHandler) AssignMaterials(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"message": error_string})
 	}
 
-	var rawMaterials []schemas.RawMaterial
+	var rawMaterials []schemas.Material
 	if err := c.BodyParser(&rawMaterials); err != nil {
 		return c.Status(400).JSON(fiber.Map{"message": "Invalid request body"})
 	}
@@ -153,12 +153,12 @@ func (handler RestaurantHandler) AssignMaterials(c *fiber.Ctx) error {
 		if product.Id == productId {
 			restaurant.Products[i].RawMaterials = rawMaterials
 			// Extit the loop
-			break
+			handler.DB.ReplaceRestaurant(restaurant)
+			message := fmt.Sprintf("Raw materials assigned to product %s", productId)
+			return c.Status(200).JSON(fiber.Map{"message": message, "materials": restaurant.Products[i].RawMaterials})
 		}
 	}
-
-	handler.DB.ReplaceRestaurant(restaurant)
-
-	return c.Status(200).JSON(restaurant)
+	message := fmt.Sprintf("Product %s not found", productId)
+	return c.Status(400).JSON(fiber.Map{"message": message})
 
 }

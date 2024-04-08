@@ -3,6 +3,7 @@ package handlers
 import (
 	"dpolimeni/stockmanagement/app/schemas"
 	"errors"
+	"fmt"
 	"slices"
 )
 
@@ -24,12 +25,13 @@ func addRawMaterials(db_materials []schemas.RawMaterial, new_materials []schemas
 	return db_materials, nil
 }
 
-func sellProduct(restaurant *schemas.Restaurant, soldProducts []schemas.SoldProducts) error {
+func sellProduct(restaurant *schemas.Restaurant, soldProducts []schemas.SoldProducts) ([]string, error) {
 	// For each sold product update the stock
 	productsSold := map[string]float64{}
 	for _, product := range soldProducts {
 		productsSold[product.Id] = product.Quantity
 	}
+	alertMaterials := []string{}
 
 	// Check if all the products are in the restaurant
 	productsCheck := map[string]bool{}
@@ -43,18 +45,25 @@ func sellProduct(restaurant *schemas.Restaurant, soldProducts []schemas.SoldProd
 				for i, dbRawMaterial := range restaurant.Stock.RawMaterials {
 					if productMaterial.Id == dbRawMaterial.Id {
 						restaurant.Stock.RawMaterials[i].Quantity -= productMaterial.Quantity * productsSold[product.Id]
+						// If the quantity is less than 0 set to 0 and return an alert
+						fmt.Println(restaurant.Stock.RawMaterials[i].Quantity)
+						if restaurant.Stock.RawMaterials[i].Quantity < 0 {
+							restaurant.Stock.RawMaterials[i].Quantity = 0
+							alertMaterials = append(alertMaterials, restaurant.Stock.RawMaterials[i].Name)
+						}
 					}
 				}
 			}
 		}
 	}
+
 	// Check if all the products are in the restaurant
 	for _, product := range soldProducts {
 		if _, ok := productsCheck[product.Id]; !ok {
 			error_string := "Product not found: " + product.Name
-			return errors.New(error_string)
+			return nil, errors.New(error_string)
 		}
 	}
 
-	return nil
+	return alertMaterials, nil
 }

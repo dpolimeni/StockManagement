@@ -10,8 +10,10 @@ definitions:
   schemas.Material:
     properties:
       id:
+        description: The id of the material
         type: string
       quantity:
+        description: The quantity of the material
         type: number
     required:
     - id
@@ -29,7 +31,7 @@ definitions:
         type: number
       rawMaterials:
         items:
-          $ref: '#/definitions/schemas.RawMaterial'
+          $ref: '#/definitions/schemas.Material'
         type: array
     required:
     - id
@@ -37,10 +39,20 @@ definitions:
     - price
     - rawMaterials
     type: object
+  schemas.ProductCreate:
+    properties:
+      id:
+        description: The id of the product
+        type: string
+      name:
+        description: The name of the product
+        type: string
+    required:
+    - id
+    - name
+    type: object
   schemas.RawMaterial:
     properties:
-      description:
-        type: string
       id:
         type: string
       name:
@@ -75,13 +87,33 @@ definitions:
     - products
     - stock
     type: object
+  schemas.RestaurantCreate:
+    properties:
+      id:
+        description: The id of the restaurant
+        type: string
+      name:
+        description: The name of the restaurant
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/schemas.ProductCreate'
+        type: array
+    required:
+    - id
+    - name
+    - products
+    type: object
   schemas.SoldProducts:
     properties:
       id:
+        description: The id of the product
         type: string
       name:
+        description: The name of the product
         type: string
       quantity:
+        description: The quantity of the product sold
         type: number
     required:
     - id
@@ -250,7 +282,7 @@ paths:
         name: restaurant
         required: true
         schema:
-          $ref: '#/definitions/schemas.Restaurant'
+          $ref: '#/definitions/schemas.RestaurantCreate'
       - default: Bearer
         description: Authorization
         in: header
@@ -289,7 +321,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/schemas.RawMaterial'
+            $ref: '#/definitions/schemas.Material'
           type: array
       - default: Bearer
         description: Authorization

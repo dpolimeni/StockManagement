@@ -1,8 +1,8 @@
 package schemas
 
 type Material struct {
-	Id       string  `json:"id" binding:"required"`
-	Quantity float64 `json:"quantity" binding:"required"`
+	Id       string  `json:"id" binding:"required"`       // The id of the material
+	Quantity float64 `json:"quantity" binding:"required"` // The quantity of the material
 }
 
 var TypeMap = map[string]float64{
@@ -16,7 +16,18 @@ type StockChange struct {
 }
 
 type SoldProducts struct {
-	Id       string  `json:"id" binding:"required"`
-	Name     string  `json:"name" binding:"required"`
-	Quantity float64 `json:"quantity" binding:"required"`
+	Id       string  `json:"id" binding:"required"`       // The id of the product
+	Name     string  `json:"name" binding:"required"`     // The name of the product
+	Quantity float64 `json:"quantity" binding:"required"` // The quantity of the product sold
+}
+
+type ProductCreate struct {
+	Id   string `json:"id" binding:"required"`   // The id of the product
+	Name string `json:"name" binding:"required"` // The name of the product
+}
+
+type RestaurantCreate struct {
+	Id       string          `json:"id" binding:"required"`   // The id of the restaurant
+	Name     string          `json:"name" binding:"required"` // The name of the restaurant
+	Products []ProductCreate `json:"products" binding:"required"`
 }

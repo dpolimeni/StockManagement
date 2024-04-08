@@ -1,19 +1,18 @@
 package schemas
 
 type RawMaterial struct {
-	Id          string  `json:"id" binding:"required"`
-	Name        string  `json:"name" binding:"required"`
-	Description string  `json:"description,omitempty" bson:"description"`
-	Quantity    float64 `json:"quantity" binding:"required"`
-	Unit        string  `json:"unit,omitempty" bson:"unit"`
+	Id       string  `json:"id" binding:"required"`
+	Name     string  `json:"name" binding:"required"`
+	Quantity float64 `json:"quantity" binding:"required"`
+	Unit     string  `json:"unit,omitempty" bson:"unit"`
 }
 
 type Product struct {
-	Id           string        `json:"id" binding:"required"`
-	Name         string        `json:"name" binding:"required"`
-	Description  string        `json:"description,omitempty" bson:"description"`
-	Price        float64       `json:"price" binding:"required"`
-	RawMaterials []RawMaterial `json:"rawMaterials" binding:"required"`
+	Id           string     `json:"id" binding:"required"`
+	Name         string     `json:"name" binding:"required"`
+	Description  string     `json:"description,omitempty" bson:"description"`
+	Price        float64    `json:"price" binding:"required"`
+	RawMaterials []Material `json:"rawMaterials" binding:"required"`
 }
 
 type Stock struct {

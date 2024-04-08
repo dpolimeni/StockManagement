@@ -3,6 +3,7 @@ package handlers
 import (
 	"dpolimeni/stockmanagement/app/schemas"
 	"dpolimeni/stockmanagement/platform/database"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,8 +30,9 @@ func (handler StockHandler) GetStock(c *fiber.Ctx) error {
 	// Get the stock levels
 	db_restaurant, err := handler.DB.GetRestaurant(restaurantId)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Cannot get the stock levels",
+		message := fmt.Sprintf("restaurant %s not found", restaurantId)
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": message,
 		})
 	}
 
@@ -69,8 +71,9 @@ func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 	// Get the restaurant from the database
 	db_restaurant, err := handler.DB.GetRestaurant(restaurant)
 	if err != nil {
+		message := fmt.Sprintf("restaurant %s not found", restaurant)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Cannot get the restaurant",
+			"message": message,
 		})
 	}
 	// Get the stock from the restaurant
@@ -86,7 +89,10 @@ func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 	// Update the stock in the database
 	db_restaurant.Stock = stock
 	handler.DB.ReplaceRestaurant(db_restaurant)
-	return c.SendString("Stock updated")
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Stock updated",
+		"stock":   stock,
+	})
 }
 
 // Update the stock with product sells
@@ -117,17 +123,23 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 		})
 	}
 	// Get the stock from the restaurant
-	err = sellProduct(&restaurant, sold_products)
+	alertMaterials, err := sellProduct(&restaurant, sold_products)
+
 	if err != nil {
 		err_string := err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err_string,
+			"message": err_string,
 		})
 	}
 	// Update the restaurant in the database
 	handler.DB.ReplaceRestaurant(restaurant)
 
-	return c.SendString("Products sold")
+	message := "Products sold and stock updated"
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": message,
+		"alert":   alertMaterials,
+	})
 }
 
 // Update the stock with real levels

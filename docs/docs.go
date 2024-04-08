@@ -175,7 +175,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schemas.Restaurant"
+                            "$ref": "#/definitions/schemas.RestaurantCreate"
                         }
                     },
                     {
@@ -272,7 +272,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/schemas.RawMaterial"
+                                "$ref": "#/definitions/schemas.Material"
                             }
                         }
                     },
@@ -480,9 +480,11 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "description": "The id of the material",
                     "type": "string"
                 },
                 "quantity": {
+                    "description": "The quantity of the material",
                     "type": "number"
                 }
             }
@@ -511,8 +513,25 @@ const docTemplate = `{
                 "rawMaterials": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schemas.RawMaterial"
+                        "$ref": "#/definitions/schemas.Material"
                     }
+                }
+            }
+        },
+        "schemas.ProductCreate": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "The id of the product",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the product",
+                    "type": "string"
                 }
             }
         },
@@ -524,9 +543,6 @@ const docTemplate = `{
                 "quantity"
             ],
             "properties": {
-                "description": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "string"
                 },
@@ -571,6 +587,30 @@ const docTemplate = `{
                 }
             }
         },
+        "schemas.RestaurantCreate": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "products"
+            ],
+            "properties": {
+                "id": {
+                    "description": "The id of the restaurant",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "The name of the restaurant",
+                    "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.ProductCreate"
+                    }
+                }
+            }
+        },
         "schemas.SoldProducts": {
             "type": "object",
             "required": [
@@ -580,12 +620,15 @@ const docTemplate = `{
             ],
             "properties": {
                 "id": {
+                    "description": "The id of the product",
                     "type": "string"
                 },
                 "name": {
+                    "description": "The name of the product",
                     "type": "string"
                 },
                 "quantity": {
+                    "description": "The quantity of the product sold",
                     "type": "number"
                 }
             }
