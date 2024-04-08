@@ -4,6 +4,7 @@ import (
 	"dpolimeni/stockmanagement/pkg/routes"
 	"dpolimeni/stockmanagement/platform/database"
 	"fmt"
+	"log"
 
 	"os"
 
@@ -32,7 +33,8 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		panic(err)
+		log.Print(err)
+		// panic(err)
 	}
 	username := os.Getenv("MONGO_USERNAME")
 	password := os.Getenv("MONGO_PASSWORD")
