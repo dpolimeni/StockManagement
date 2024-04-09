@@ -56,7 +56,7 @@ func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 	var stock_change schemas.StockChange
 	if err := c.BodyParser(&stock_change); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Cannot parse the request",
+			"message": "Cannot parse the request",
 		})
 	}
 
@@ -64,7 +64,7 @@ func (handler StockHandler) UpdateMaterials(c *fiber.Ctx) error {
 	change_type := stock_change.Type
 	if change_type != "purchase" && change_type != "waste" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid type",
+			"message": "Invalid type. must be one of purchase or waste",
 		})
 	}
 
@@ -110,7 +110,7 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 	var sold_products []schemas.SoldProducts
 	if err := c.BodyParser(&sold_products); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Cannot parse the request",
+			"message": "Cannot parse the request",
 		})
 	}
 	// Get the restaurant ID
@@ -118,8 +118,9 @@ func (handler StockHandler) SellProducts(c *fiber.Ctx) error {
 	// Get the restaurant from the database
 	restaurant, err := handler.DB.GetRestaurant(restaurantId)
 	if err != nil {
+		message := fmt.Sprintf("restaurant %s not found", restaurantId)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Cannot get the restaurant",
+			"message": message,
 		})
 	}
 	// Get the stock from the restaurant
